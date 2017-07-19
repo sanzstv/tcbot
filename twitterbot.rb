@@ -32,8 +32,6 @@ while true
 			'suspect',
 			'bodies',
 			'remains',
-			'corpse',
-			'corpses',
 			'missing',
 			'murder',
 			'murders',
