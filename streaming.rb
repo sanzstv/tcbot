@@ -2,7 +2,6 @@
 require 'Twitter'
 require_relative 'queries'
 
-#include TCBotSearch
 #this bot (still in progress) is meant to monitor crime/mystery 
 #related topics on the Twitter
 while true
@@ -14,26 +13,30 @@ while true
 		  access_token_secret: ENV['TWITTER_AT_SECRET']
 		}
 
-		client = Twitter::REST::Client.new(config)
+		rest_client = Twitter::REST::Client.new(config)
+		streaming_client = Twitter::Streaming::Client.new(config)
 
 		#TEST MSG
 		#client.update("This is a bot that reports on true crime!")
+
 
 		search_params = {
 			result_type: "mixed",
 			count: 3
 		}
 
-		TCBotSearch.keyphrases.each do |query|
-			client.search(query, search_params).each do |tweet|
-				#don't want to retweet multiple times
-				if !tweet.retweeted?
-					client.retweet tweet
-				end
-			end
-			puts query
-		end
-		break
+	
+		 streaming_client.filter(:track => TCBotSearch.keyphrases.join (',')) do |tweet|
+			#articles are best but tweets will be ok to test
+		 	if tweet.is_a?(Twitter::Tweet) && !retweeted
+		 		puts tweet.text
+		 		rest_client.retweet tweer
+		 	end
+		 end
+		 rescue
+		  	puts 'error'
+		  	sleep 5
+		 end
 
 	end
 end
