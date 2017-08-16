@@ -12,3 +12,13 @@ def CacheTweet(id, text)
 		puts "Most recent Tweet cached"
 	end
 end
+
+def ReadCache()
+	file = File.read('config.json')
+
+	response = JSON.parse(file)
+	id = response["since_id"]
+	text = response["text"]
+
+	return id
+end

@@ -13,12 +13,8 @@ config = {
 client = Twitter::REST::Client.new(config)
 
 #check to make sure we aren't going through older tweets
-file = File.read('config.json')
 
-response = JSON.parse(file)
-id = response["since_id"]
-text = response["text"]
-puts id
+id = ReadCache()
 
 search_params = {
 		result_type: "recent",

@@ -3,7 +3,10 @@ require 'Twitter'
 require_relative 'queries'
 require_relative 'cache'
 
-#this bot (still in progress) is meant to monitor crime/mystery related topics on The Twitter
+#`	this bot (still in progress) is meant to monitor crime/mystery related topics on The Twitter
+#   caccepts optional list of queries as command line argument in the format:
+# 		ruby twitterbot.rb "query 1" "query 2" ...
+#   if no arguments are provided, file will default to list of queries specified in 'queries.rb'
 	config = {
 		  consumer_key: ENV['TWITTER_CKEY'],
 		  consumer_secret: ENV['TWITTER_CSECRET'],
@@ -11,23 +14,29 @@ require_relative 'cache'
 		  access_token_secret: ENV['TWITTER_AT_SECRET']
 	}
 	client = Twitter::REST::Client.new(config)
-	file = File.read('config.json')
+	
+	id = ReadCache()
 
-	response = JSON.parse(file)
-	id = response["since_id"]
-	text = response["text"]
 
 	#TEST MSG
 	search_params = {
-		result_type: "mixed",
-		count: 3,
+		result_type: "recent",
+		count: 5,
 		lang: "en",
 		since_id: id
 	}
-	TCBotSearch.keyphrases.each do |query|
+	queries = []
+	if ARGV.length > 0
+		ARGV.each do |query|
+   			queries.push(query)
+		end
+	else
+		queries= TCBotSearch.keyphrases
+	end
+	queries.each do |query|
 		client.search(query, search_params).each do |tweet|
 			#don't want to retweet multiple times
-			if tweet.retweeted? == false
+			if tweet.retweeted_status? == false
 				client.retweet tweet
 			end
 		end
