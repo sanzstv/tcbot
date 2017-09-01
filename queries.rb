@@ -1,13 +1,14 @@
 #queries.rb
 
 module TCBotSearch
-	#list of keyphrases to check for, obviously need to find way to streamline
+	#list of keyphrases to check for, need to find way to streamline
 	@keyphrases = [	
 			'disappearance',
 			'disappearances',
-			'unsolved',
-			'unresolved',
+			'unsolved crime',
 			'unidentified',
+			'IDed',
+			'unresolved murder',
 			'Jane Doe',
 			'John Doe',
 			'#amberalert',
@@ -15,14 +16,12 @@ module TCBotSearch
 			'mystery',
 			'mysteries',
 			'manhunt',
-			'suspect',
-			'remains',
+			'remains found',
 			'missing person',
 			'murder',
 			'murders',
 			'killing',
 			'killings',
-			'slaying',
 			'cold case'
 		]
 

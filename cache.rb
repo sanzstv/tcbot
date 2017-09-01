@@ -2,14 +2,13 @@
 
 require 'json'
 
-def CacheTweet(id, text)
-	tweet ={
-		"since_id" => id,
-		"tweet_text" => text
-	}
+def CacheTweet(cache)
 	File.open("config.json", "w") do |file|
-		file.write(tweet.to_json)
-		puts "Most recent Tweet cached"
+		cached = {
+			ids => cache
+		}
+		file.write(cached.to_json)
+		puts "Most recent Tweets cached"
 	end
 end
 
@@ -17,8 +16,7 @@ def ReadCache()
 	file = File.read('config.json')
 
 	response = JSON.parse(file)
-	id = response["since_id"]
-	text = response["text"]
+	#id_cache = response["since_id"]
 
 	return id
 end

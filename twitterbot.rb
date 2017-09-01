@@ -15,15 +15,13 @@ require_relative 'cache'
 	}
 	client = Twitter::REST::Client.new(config)
 	
-	id = ReadCache()
 
 
 	#TEST MSG
 	search_params = {
 		result_type: "recent",
-		count: 5,
-		lang: "en",
-		since_id: id
+		count: "1",
+		lang: "en"
 	}
 	queries = []
 	if ARGV.length > 0
@@ -34,7 +32,7 @@ require_relative 'cache'
 		queries= TCBotSearch.keyphrases
 	end
 	queries.each do |query|
-		client.search(query, search_params).each do |tweet|
+		client.search(query, search_params).take(3).each do |tweet|
 			#don't want to retweet multiple times
 			if tweet.retweeted_status? == false
 				client.retweet tweet
